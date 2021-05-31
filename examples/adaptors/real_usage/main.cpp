@@ -55,7 +55,6 @@ declare as_string = [](auto&& object) -> std::string
     return as_string_impl(object);
 };
 
-
 struct NamedStruct {};
 struct UnnamedStruct {};
 
