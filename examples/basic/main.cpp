@@ -6,9 +6,8 @@ declare add = [] (int& a, int b) -> void
     a += b;
 };
 
+// RUST ANALOGUE
 /*
-    //RUST ANALOGUE
-
     trait AnyTraitName
     {
         fn add(&self, other: &Self) -> ();
@@ -21,8 +20,18 @@ declare add = [] (int& a, int b) -> void
             *self += *other;
         }
     }
+*/
 
- */
+// C#(Java) ANALOGUE
+/*
+    AnyStaticClassName
+    {
+        public static void add(this ref int a, int b)
+        {
+            a += b;
+        }
+    }
+*/
 
 int main()
 {
@@ -31,7 +40,7 @@ int main()
 
     a | add(b); // a += b => 1565
     add(a, -1); // a += -1 => 1564
-    add(2)(a); // a += 2 => 1566
+    add /*args =>*/ (2/*, ...*/) /*object =>*/ (a); // a += 2 => 1566
 
     std::cout << a;
 }
