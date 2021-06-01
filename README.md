@@ -2,7 +2,7 @@ Adaptors
 ====
 > C++ functional library
 
-C++ adapters is a small library that provides an interface to easily create "adapters" (extension methods)
+C++ adapters is a small library that provides an interface to easily create "adaptors" (extension methods)
 ----------
 
 
