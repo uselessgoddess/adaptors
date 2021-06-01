@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.19)
 project(adaptors)
 include(help.cmake)
-
+add_compile_options(-fpermissive)
 add_library(adaptors INTERFACE)
     target_include_directories(adaptors INTERFACE src)
     set_target_properties(adaptors PROPERTIES CXX_STANDARD 20)
@@ -22,3 +22,5 @@ foreach(DIR ${SUBDIR_LIST_CURRY})
     set_target_properties(${EXECUTABLE} PROPERTIES CXX_STANDARD 20)
     target_link_libraries(${EXECUTABLE} PUBLIC adaptors)
 endforeach()
+
+

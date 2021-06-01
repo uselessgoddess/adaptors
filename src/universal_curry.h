@@ -1,72 +1,149 @@
-#ifndef UNIVERSAL_CURRY
-#define UNIVERSAL_CURRY
+#ifndef CURRY_IMPL
+#define CURRY_IMPL
 
 #include <type_traits>
 #include <algorithm>
 
-template<typename Callable>
-struct universal_curry
+#include <universal_adaptor.h>
+#include <iostream>
+
+namespace curry
 {
-    Callable callable;
 
-    constexpr universal_curry(Callable&& callable)
-        : callable(callable)
+    template<typename Callable>
+    struct curry_impl
     {
-    }
+        Callable callable;
 
-    template<typename... Args>
-    constexpr decltype(auto) operator()(auto&& arg) const
-    {
-
-        if constexpr (std::is_invocable_v<Callable, decltype(arg)>)
+        constexpr curry_impl(Callable&& callable)
+            : callable(callable)
         {
-            return callable(arg);
         }
-        else
+
+        constexpr decltype(auto) operator()(auto&& arg) const
         {
-
-            auto closure = [& /*like it*/](auto&&... args) -> decltype(auto)
+            if constexpr (std::is_invocable_v<Callable, decltype(arg)>)
             {
-                return callable(arg, args...);
-            };
+                return callable(arg);
+            }
+            else
+            {
+                auto closure = [&](auto&& ... args) -> decltype(callable(arg, args...))
+                {
+                    return callable(arg, args...);
+                };
 
-            return universal_curry<decltype(closure)>(std::move(closure));
+                return curry_impl<decltype(closure)>(std::move(closure));
+            }
         }
     };
-};
 
-template<typename Callable>
-struct universal_reverse_curry
-{
-    Callable callable;
-
-    constexpr universal_reverse_curry(Callable&& callable)
-        : callable(callable)
+    template<typename Callable>
+    struct uncurry_impl
     {
-    }
+        Callable callable;
 
-    template<typename... Args>
-    constexpr decltype(auto) operator()(auto&& arg) const
-    {
-
-        if constexpr (std::is_invocable_v<Callable, decltype(arg)>)
+        constexpr uncurry_impl(Callable&& callable)
+            : callable(callable)
         {
-            return callable(arg);
         }
-        else
+
+        constexpr decltype(auto) operator()(auto&& ... args) const
         {
+            return __for_each_args(callable, args...);
+        };
 
-            auto closure = [& /*like it*/](auto&&... args) -> decltype(auto)
+    private:
+        static constexpr auto __for_each_args(auto&& func, auto&& arg, auto&& ... args)
+        {
+            if constexpr (sizeof...(args) == 0)
             {
-                return callable(args..., arg);
-            };
-
-            return universal_curry<decltype(closure)>(std::move(closure));
+                return func(arg);
+            }
+            else
+            {
+                return __for_each_args(func(arg), args...);
+            }
         }
     };
-};
 
-#define curry constexpr inline universal_curry
-#define rcurry constexpr inline universal_reverse_curry
+    template<typename Callable>
+    struct reverse_curry_impl
+    {
+        Callable callable;
 
-#endif //UNIVERSAL_CURRY
+        constexpr reverse_curry_impl(Callable&& callable)
+            : callable(callable)
+        {
+        }
+
+        constexpr decltype(auto) operator()(auto&& arg) const
+        {
+            if constexpr (std::is_invocable_v<Callable, decltype(arg)>)
+            {
+                return callable(arg);
+            }
+            else
+            {
+                auto closure = [&](auto&& ... args) -> decltype(callable(args..., arg))
+                {
+                    return callable(args..., arg);
+                };
+
+                return reverse_curry_impl<decltype(closure)>(std::move(closure));
+            }
+        }
+    };
+
+    template<typename Callable>
+    struct reverse_uncurry_impl
+    {
+        Callable callable;
+
+        constexpr reverse_uncurry_impl(Callable&& callable)
+            : callable(callable)
+        {
+        }
+
+        constexpr decltype(auto) operator()(auto&& ... args) const
+        {
+            return __for_each_args(callable, args...);
+        };
+
+    private:
+        static constexpr auto __for_each_args(auto&& func, auto&& arg, auto&& ... args)
+        {
+            if constexpr (sizeof...(args) == 0)
+            {
+                return func(arg);
+            }
+            else
+            {
+                return __for_each_args(func(arg), args...);
+            }
+        }
+    };
+
+    template<typename Callable>
+    curry_impl(Callable&&) -> curry_impl<Callable>;
+
+    template<typename Callable>
+    uncurry_impl(Callable&&) -> uncurry_impl<Callable>;
+
+    template<typename Callable>
+    reverse_curry_impl(Callable&&) -> reverse_curry_impl<Callable>;
+
+    template<typename Callable>
+    reverse_uncurry_impl(Callable&&) -> reverse_uncurry_impl<Callable>;
+
+
+#define currying const static inline curry::curry_impl
+
+    declare as_curry = [](auto&& callable)
+    {
+        return uncurry_impl(curry_impl(callable));
+    };
+
+}
+
+#endif //CURRY_IMPL

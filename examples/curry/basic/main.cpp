@@ -4,12 +4,14 @@
 
 #include "../../help_lib.h"
 
-rcurry rdiv = [](auto a, auto b)
+// make acurry function from adaptor
+auto rdiv = [](auto a, auto b)
 {
-    return a / b;
-};
+    return b / a;
+} | curry::as_curry();
 
-curry map = [](auto closure, std::ranges::range auto& range)
+// classic style curry declaration
+currying map = [](auto closure, std::ranges::range auto& range)
 {
     for (auto& item : range)
     {
@@ -19,10 +21,10 @@ curry map = [](auto closure, std::ranges::range auto& range)
 
 int main()
 {
-    auto div_2 = map(rdiv(2));
+    auto div_2 = map(rdiv(2)) | adaptors::as_adaptor();
 
     std::array array{2, 4, 6};
-    div_2(array);
 
+    array | div_2();
     array | print();
 }
