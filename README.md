@@ -7,7 +7,7 @@ C++ adapters is a small library that provides an interface to easily create "ada
 
 
 
-##Why adaptors?
+## Why adaptors?
 I'm use 
 [std::ranges ideology]("https://coliru.stacked-crooked.com/view?id=bef2902cc70f0044")
 for create this
@@ -132,16 +132,14 @@ std::size_t hash_impl(int object)
 /// for overload use overload hash_impl
 ```
 
-[full example](https://github.com/uselessgoddess/adaptors/blob/main/examples/adaptors/overloading/main.cpp")
+[full example](https://github.com/uselessgoddess/adaptors/blob/main/examples/adaptors/overloading/main.cpp)
 
 ### Create universal adaptor for `push` to stl collections
 
 ```cpp
 // C++ 20 like
-#include
-<ranges>
-#include
-<universal_adaptor.h> // temporary name
+#include <ranges>
+#include <universal_adaptor.h> // temporary name
 using namespace adaptors;
 
 template<typename Collection>
@@ -183,6 +181,7 @@ int main()
     // vector same as { 1, 2, 3, 4, 5 }
 }
 ```
-[full example]("https://github.com/uselessgoddess/adaptors/blob/main/examples/adaptors/traits/main.cpp")
 
-### [more examples]("https://github.com/uselessgoddess/adaptors/blob/main/examples/adaptors/")
+[full example](https://github.com/uselessgoddess/adaptors/blob/main/examples/adaptors/traits/main.cpp)
+
+### [more examples](https://github.com/uselessgoddess/adaptors/blob/main/examples/adaptors/)
