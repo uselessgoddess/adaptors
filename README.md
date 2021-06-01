@@ -27,7 +27,7 @@ struct MyStruct
     int value;
 };
 
-declare view =[](MyStruct& my_struct) -> void
+declare view = [](MyStruct& my_struct) -> void
 {
     std::cout << "MyStruct: " << my_struct.value << std::endl;
 };
@@ -48,12 +48,12 @@ int main()
 #include <universal_adaptor.h> // temporary name
 using namespace adaptors;
 
-declare type_id =[](auto&& self)
+declare type_id = [](auto&& self)
 {
     return typeid(self);
 };
 
-declare type_name =[](auto&& self) -> std::string
+declare type_name = [](auto&& self) -> std::string
 {
     int status;
     std::string name = abi::__cxa_demangle(typeid(self).name(), 0, 0, &status);
@@ -75,7 +75,7 @@ int main()
 template<typename T>
 concept numeric = std::integral<T> || std::floating_point<T>;
 
-declare sign =[](numeric auto num) -> int
+declare sign = [](numeric auto num) -> int
 {
     if (num == 0)
         return 0;
@@ -157,7 +157,7 @@ concept push_back_able = requires(Collection collection, std::ranges::range_valu
 template<typename Collection>
 concept universal_push_able = push_able<Collection> || push_back_able<Collection>;
 
-declare push =[](universal_push_able auto& collection, std::ranges::range_value_t<Collection> item) -> decltype(auto); /*return ref to collection*/
+declare push = [](universal_push_able auto& collection, std::ranges::range_value_t<Collection> item) -> decltype(auto); /*return ref to collection*/
 {
     using Collection = decltype(collection);
 
