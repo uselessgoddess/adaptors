@@ -9,7 +9,7 @@ C++ adapters is a small library that provides an interface to easily create "ada
 
 ## Why adaptors?
 I'm use 
-[std::ranges ideology]("https://coliru.stacked-crooked.com/view?id=bef2902cc70f0044")
+[std::ranges ideology](https://coliru.stacked-crooked.com/view?id=bef2902cc70f0044)
 for create this
 
 How to Use
