@@ -14,8 +14,11 @@
  * std::ranges::range_value_t<RANGE> return item type from RANGE
  * (RANGE is std::ranges::range)
  *
+ * concept is constexpr bool, which has some features and set requires
  *
+ * requires check their expression as compile able
  *
+ * requires before function check expression as true
  * */
 
 template<typename Collection>
@@ -32,13 +35,12 @@ concept __push_backable = requires(Collection collection, std::ranges::range_val
     collection.push_back(item);
 };
 
-
 declare push = [](auto& collection, auto item) -> decltype(collection)
 requires
-(__pushable<decltype(collection)> ||
- __push_backable<decltype(collection)>)
-&&
-std::same_as<std::ranges::range_value_t<decltype(collection)>, decltype(item)>
+    (__pushable<decltype(collection)> ||
+    __push_backable<decltype(collection)>)
+    &&
+    std::same_as<std::ranges::range_value_t<decltype(collection)>, decltype(item)>
 /*
  * We have Collection<ItemType>
  * requires ItemType == decltype(item)

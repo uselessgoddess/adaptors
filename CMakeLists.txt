@@ -22,5 +22,3 @@ foreach(DIR ${SUBDIR_LIST_CURRY})
     set_target_properties(${EXECUTABLE} PROPERTIES CXX_STANDARD 20)
     target_link_libraries(${EXECUTABLE} PUBLIC adaptors)
 endforeach()
-
-
