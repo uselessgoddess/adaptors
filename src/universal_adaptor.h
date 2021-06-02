@@ -17,8 +17,7 @@ namespace adaptors
         {
         }
 
-        template<typename... Args>
-        constexpr decltype(auto) operator()(Args&& ... args) const
+        constexpr decltype(auto) operator()(auto&&... args) const
         {
             return callable(args...);
         };
@@ -37,10 +36,9 @@ namespace adaptors
         {
         }
 
-        template<typename... Args>
-        constexpr decltype(auto) operator()(Args&& ... args) const
+        constexpr decltype(auto) operator()(auto&&... args) const
         {
-            if constexpr (std::is_invocable_v<Callable, Args...>)
+            if constexpr (std::is_invocable_v<Callable, decltype(args)...>)
             {
                 return callable(args...);
             }
@@ -57,7 +55,7 @@ namespace adaptors
     };
 
     template<typename Callable>
-    decltype(auto) operator|(auto&& object, universal_adaptor_closure<Callable> adaptor)
+    decltype(auto) operator|(auto&& object, const universal_adaptor_closure<Callable>& adaptor)
     {
         return adaptor(object);
     }

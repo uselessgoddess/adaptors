@@ -30,7 +30,7 @@ int main()
 
         for (int i = 0; i < 1e8; i++)
         {
-            push_back(vector, i);
+            push_back(vector, (int&&)i);
         }
 
         auto end = std::chrono::system_clock::now();
