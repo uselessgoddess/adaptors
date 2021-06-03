@@ -102,11 +102,11 @@ impl<T: std::num> NumSignExt for T
 {
     fn sign(self) -> i32
     {
-        if num == 0 {
+        if self == 0 {
             return 0;
         }
 
-        return if num > 0 { 1 } else { -1 };
+        return if self > 0 { 1 } else { -1 };
     }
 }
 ```
