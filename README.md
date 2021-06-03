@@ -75,12 +75,12 @@ int main()
 template<typename T>
 concept numeric = std::integral<T> || std::floating_point<T>;
 
-declare sign = [](numeric auto num) -> int
+declare sign = [](numeric auto self) -> int
 {
-    if (num == 0)
+    if (self == 0)
         return 0;
 
-    return num > 0 ? 1 : -1;
+    return self > 0 ? 1 : -1;
 };
 
 // usage:
