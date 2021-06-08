@@ -1,13 +1,13 @@
 #include <universal_adaptor.h>
 #include <iostream>
 
-// easy feature overloading
+// easy feature 2.overloading
 declare inc = [](int& object, int increment = 1) -> void
 {
     object += increment;
 };
 
-// standard overloading
+// standard 2.overloading
 struct rectangle
 {
     float a, b;

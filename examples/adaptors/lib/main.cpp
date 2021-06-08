@@ -83,12 +83,12 @@ namespace lib
             return string;
         };
 
-        [[maybe_unused]] declare in_brackets = [](std::string& string, std::pair<char, char> brackets = {'(', ')'}) -> std::string&
+        [[maybe_unused]] declare in_brackets = [](std::string& string, std::pair<char, char> brackets = { '(', ')' }) -> std::string&
         {
-            if(string.front() != brackets.first)
+            if (string.front() != brackets.first)
                 string.insert(0, 1, brackets.first);
 
-            if(string.back() != brackets.second)
+            if (string.back() != brackets.second)
                 string.insert(string.size(), 1, brackets.second);
         };
     }
@@ -119,7 +119,7 @@ namespace lib
             return string;
         };
 
-        [[maybe_unused]] declare in_brackets = [](std::string string, std::pair<char, char> brackets = {'(', ')'}) -> std::string
+        [[maybe_unused]] declare in_brackets = [](std::string string, std::pair<char, char> brackets = { '(', ')' }) -> std::string
         {
             uncopy::in_brackets(string, brackets);
             return string;
@@ -153,7 +153,7 @@ int main()
                              | lib::copy::trim_single('[')
                              | lib::copy::trim_single(']')
                              | lib::copy::trim_single('_')
-                             | lib::copy::in_brackets(std::pair{'{', '}'});
+                             | lib::copy::in_brackets(std::pair{ '{', '}' });
 
         /// Pipe vs REAL PROCEDURAL SYNTAX
         /*

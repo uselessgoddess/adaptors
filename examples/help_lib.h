@@ -5,12 +5,25 @@ declare print = [](const std::ranges::range auto& collection) -> decltype(collec
 {
     std::cout << "[";
 
-    for (const auto& item : collection)
+    for (int i = 0; auto&& item : collection)
     {
         std::cout << item;
-        if (&item != &*(std::ranges::end(collection) - 1))
+        if (i != collection.size() - 1)
             std::cout << ", ";
+
+        i++;
     }
+
+    /*
+        C positive style
+        for (const auto& item : collection)
+        {
+            std::cout << item;
+            if (&item != std::to_address(std::ranges::end(collection) - 1))
+                std::cout << ", ";
+        }
+    */
+
     std::cout << "]";
 
     return collection;
