@@ -38,7 +38,7 @@ namespace adaptors
     {
         Callable callable;
 
-        constexpr universal_adaptor(Callable&& callable)
+        constexpr universal_adaptor(Callable callable)
             : callable(callable)
         {
         }
@@ -81,15 +81,15 @@ namespace adaptors
     };
 
     template<typename Callable>
-    decltype(auto) operator|(auto&& object, const universal_adaptor_closure<Callable>& adaptor)
+    constexpr decltype(auto) operator|(auto&& object, const universal_adaptor_closure<Callable>& adaptor)
     {
         return adaptor(object);
     }
 
-    #define declare const static inline adaptors::universal_adaptor
+    #define declare constexpr static inline adaptors::universal_adaptor
 
     // small extensions lib
-    declare as_adaptor = [](auto&& callable)
+    declare as_adaptor = [](auto callable)
     {
         return adaptors::universal_adaptor<decltype(callable)>(callable);
     };

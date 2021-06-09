@@ -137,7 +137,7 @@ namespace curry
     reverse_uncurry_impl(Callable&&) -> reverse_uncurry_impl<Callable>;
 
 
-#define currying const static inline curry::curry_impl
+    #define currying constexpr static inline curry::curry_impl
 
     declare as_curry = [](auto&& callable)
     {
