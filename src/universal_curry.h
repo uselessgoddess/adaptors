@@ -139,9 +139,9 @@ namespace curry
 
     #define currying constexpr static inline curry::curry_impl
 
-    declare as_curry = [](auto&& callable)
+    declare as_curry = [] <typename Callable> (Callable&& callable)
     {
-        return uncurry_impl(curry_impl(callable));
+        return uncurry_impl(curry_impl(std::forward<Callable>(callable)));
     };
 
 }

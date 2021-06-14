@@ -6,28 +6,21 @@
 
 namespace adaptors
 {
-
     template<typename Closure>
     struct universal_adaptor_closure
     {
-        Closure callable;
+        const Closure& closure;
 
-        constexpr universal_adaptor_closure(Closure&& callable)
-            : callable(callable)
+        constexpr universal_adaptor_closure(Closure&& closure)
+            : closure(closure)
         {
         }
 
-        constexpr decltype(auto) operator()(auto&&... args) const
+        template<typename Self>
+        constexpr decltype(auto) operator()(Self&& self) const
         {
-            return callable(args...);
+            return closure(std::forward<Self>(self));
         };
-
-        //template<typename... Args>
-        //constexpr decltype(auto) operator()(auto&&... args) const
-        //{
-        //    sizeof...(Args);
-        //    return callable(args...);
-        //};
     };
 
     template<typename Closure>
@@ -43,55 +36,37 @@ namespace adaptors
         {
         }
 
-        constexpr decltype(auto) operator()(auto&&... args) const
+        template<typename... Args>
+        constexpr decltype(auto) operator()(Args&&... args) const
         {
             if constexpr (std::is_invocable_v<Callable, decltype(args)...>)
             {
-                return callable(args...);
+                return callable(std::forward<Args>(args)...);
             }
             else
             {
-                auto closure = [& /*like it*/](auto&& object) -> decltype(auto)
+                auto closure = [&] <typename Object> (Object&& object) -> decltype(auto)
                 {
-                    return callable(object, args...);
+                    return callable(std::forward<Object>(object), std::forward<Args>(args)...);
                 };
 
                 return universal_adaptor_closure(std::move(closure));
             }
         };
-
-        /*template<typename Args...>
-        constexpr decltype(auto) operator()(auto&&... args) const
-        {
-            if constexpr (std::is_invocable_v<Callable, decltype(args)...>)
-            {
-                return callable(args...);
-            }
-            else
-            {
-                auto closure = [& *//*like it*//*](auto&& object) -> decltype(auto)
-                {
-                    return callable(object, args...);
-                };
-
-                return universal_adaptor_closure(std::move(closure));
-            }
-        };*/
-
     };
 
     template<typename Callable>
-    constexpr decltype(auto) operator|(auto&& object, const universal_adaptor_closure<Callable>& adaptor)
+    constexpr decltype(auto) operator|(auto&& object, universal_adaptor_closure<Callable>&& adaptor)
     {
-        return adaptor(object);
+        return std::forward<decltype(adaptor)>(adaptor)(std::forward<decltype(object)>(object));
     }
 
     #define declare constexpr static inline adaptors::universal_adaptor
 
     // small extensions lib
-    declare as_adaptor = [](auto callable)
+    declare as_adaptor = [] <typename Callable> (Callable&& callable)
     {
-        return adaptors::universal_adaptor<decltype(callable)>(callable);
+        return adaptors::universal_adaptor<Callable>(callable);
     };
 }
 

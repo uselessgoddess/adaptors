@@ -6,7 +6,7 @@
 #include "../../help_lib.h"
 
 // FUTURE FEATURE
-// reverse curry and other callable object
+// reverse curry and other closure object
 //
 // syntax
 /*
